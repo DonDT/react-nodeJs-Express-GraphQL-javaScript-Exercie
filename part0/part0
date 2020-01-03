@@ -1,0 +1,61 @@
+0.4
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/note_note
+server-->browser: status code 302
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server-->browser: html code
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: [{ content: "All the content", date: "All dates" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
+
+0.5
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+server-->browser: html code
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: [{ content: "All the content", date: "All dates" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
+
+0.6
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
+
+note over browser:
+browser sends the new note to the server
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->browser: Status Code 201 created
+
+
