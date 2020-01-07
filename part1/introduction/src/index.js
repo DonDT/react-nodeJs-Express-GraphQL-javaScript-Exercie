@@ -9,70 +9,66 @@ const Header = props => {
 const Content = props => {
   return (
     <div>
-      <Part part={props.part1} exercises={props.exercises1} />
-      <Part part={props.part2} exercises={props.exercises2} />
-      <Part part={props.part3} exercises={props.exercises3} />
+      <Part parts={props.parts} />
     </div>
   );
 };
 const Total = props => {
-  return <div>{props.exercisesCount}</div>;
+  return (
+    <div>
+      {props.parts[0].exercises +
+        props.parts[1].exercises +
+        props.parts[2].exercises}
+    </div>
+  );
 };
 
 const Part = props => {
   return (
     <div>
-      {props.part} {props.exercises}
+      <p>
+        {" "}
+        {props.parts[0].name} {props.parts[0].exercises}
+      </p>
+      <p>
+        {" "}
+        {props.parts[1].name} {props.parts[1].exercises}
+      </p>
+      <p>
+        {" "}
+        {props.parts[2].name} {props.parts[2].exercises}
+      </p>
     </div>
   );
 };
 
 const App = () => {
   const course = "Half Stack application development";
-  const part1 = {
-    name: "Fundamentals of React",
-    exercises: 10
-  };
-  const part2 = {
-    name: "Using props to pass data",
-    exercises: 7
-  };
-  const part3 = {
-    name: "State of a component",
-    exercises: 14
-  };
-  // const part1 = "Fundamentals of React";
-  // const exercises1 = 10;
-  // const part2 = "Using props to pass data";
-  // const exercises2 = 7;
-  // const part3 = "State of a component";
-  // const exercises3 = 14;
+
+  const parts = [
+    {
+      name: "Fundamentals of React",
+      exercises: 10
+    },
+    {
+      name: "Using props to pass data",
+      exercises: 7
+    },
+    {
+      name: "State of a component",
+      exercises: 14
+    }
+  ];
 
   return (
     <div>
       <Header course={course} />
+      <Content parts={parts} />
       <p>
-        <Content part1={part1.name} exercises1={part1.exercises} />
-      </p>
-      <p>
-        <Content part2={part2.name} exercises2={part2.exercises} />
-      </p>
-      <p>
-        <Content part3={part3.name} exercises3={part3.exercises} />
-      </p>
-      <p>
-        Number of exercises{" "}
-        <Total
-          exercisesCount={part1.exercises + part2.exercises + part3.exercises}
-        />{" "}
+        Number of exercises <Total parts={parts} />
       </p>
     </div>
   );
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-//serviceWorker.unregister();
