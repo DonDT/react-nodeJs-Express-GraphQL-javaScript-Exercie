@@ -61,6 +61,8 @@ const App = () => {
     ]
   };
 
+  // Adjusting Scripts
+
   return (
     <div>
       <Header course={course.name} />
