@@ -11,12 +11,20 @@ const Statistics = ({ handleClick, good, bad, neutral }) => {
         <button onClick={() => handleClick("bad")}> Bad</button>
       </div>
       Statistics
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {good + neutral + bad}</p>
-      <p>Average {(good + neutral + bad) / 3}</p>
-      <p>Positive {good > 0 ? (good / (good + neutral + bad)) * 100 : 0}%</p>
+      {good + bad + neutral === 0 ? (
+        <div style={{ marginTop: "20px" }}> No Feedback Given </div>
+      ) : (
+        <div>
+          <p>Good {good}</p>
+          <p>Neutral {neutral}</p>
+          <p>Bad {bad}</p>
+          <p>All {good + neutral + bad}</p>
+          <p>Average {(good + neutral + bad) / 3}</p>
+          <p>
+            Positive {good > 0 ? (good / (good + neutral + bad)) * 100 : 0}%
+          </p>
+        </div>
+      )}
     </div>
   );
 };
@@ -44,21 +52,6 @@ const App = () => {
       bad={bad}
       neutral={neutral}
     />
-    // <div style={{ marginTop: "15px" }}>
-    //   Give Feedback
-    //   <div style={{ marginTop: "15px", marginBottom: "20px" }}>
-    //     <button onClick={() => handleClick("good")}> Good</button>
-    //     <button onClick={() => handleClick("neutral")}> Neutral</button>
-    //     <button onClick={() => handleClick("bad")}> Bad</button>
-    //   </div>
-    //   Statistics
-    //   <p>Good {good}</p>
-    //   <p>Neutral {neutral}</p>
-    //   <p>Bad {bad}</p>
-    //   <p>All {good + neutral + bad}</p>
-    //   <p>Average {(good + neutral + bad) / 3}</p>
-    //   <p>Positive {good > 0 ? (good / (good + neutral + bad)) * 100 : 0}%</p>
-    // </div>
   );
 };
 
