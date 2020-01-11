@@ -14,7 +14,14 @@ const Button = ({ handleClick }) => {
 const Statistic = ({ text, value }) => {
   return (
     <div style={{ marginTop: "20px" }}>
-      {text} {value}
+      <table>
+        <tbody>
+          <tr>
+            <td style={{ width: "50px" }}>{text}</td>
+            <td style={{ textAlign: "start" }}>{value}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
