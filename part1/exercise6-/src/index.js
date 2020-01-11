@@ -1,28 +1,43 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Button = ({ handleClick }) => {
+  return (
+    <div style={{ marginTop: "15px", marginBottom: "20px" }}>
+      <button onClick={() => handleClick("good")}> Good</button>
+      <button onClick={() => handleClick("neutral")}> Neutral</button>
+      <button onClick={() => handleClick("bad")}> Bad</button>
+    </div>
+  );
+};
+
+const Statistic = ({ text, value }) => {
+  return (
+    <div style={{ marginTop: "20px" }}>
+      {text} {value}
+    </div>
+  );
+};
+
 const Statistics = ({ handleClick, good, bad, neutral }) => {
   return (
     <div style={{ marginTop: "15px" }}>
       Give Feedback
-      <div style={{ marginTop: "15px", marginBottom: "20px" }}>
-        <button onClick={() => handleClick("good")}> Good</button>
-        <button onClick={() => handleClick("neutral")}> Neutral</button>
-        <button onClick={() => handleClick("bad")}> Bad</button>
-      </div>
+      <Button handleClick={handleClick} />
       Statistics
       {good + bad + neutral === 0 ? (
         <div style={{ marginTop: "20px" }}> No Feedback Given </div>
       ) : (
         <div>
-          <p>Good {good}</p>
-          <p>Neutral {neutral}</p>
-          <p>Bad {bad}</p>
-          <p>All {good + neutral + bad}</p>
-          <p>Average {(good + neutral + bad) / 3}</p>
-          <p>
-            Positive {good > 0 ? (good / (good + neutral + bad)) * 100 : 0}%
-          </p>
+          <Statistic text="Good" value={good} />
+          <Statistic text="Neutral" value={neutral} />
+          <Statistic text="Bad" value={bad} />
+          <Statistic text="All" value={good + neutral + bad} />
+          <Statistic text="Average" value={(good + neutral + bad) / 3} />
+          <Statistic
+            text="Positive"
+            value={(good > 0 ? (good / (good + neutral + bad)) * 100 : 0) + "%"}
+          />
         </div>
       )}
     </div>
