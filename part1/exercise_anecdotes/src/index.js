@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const App = props => {
+const App = () => {
   const [selected, setSelected] = useState(0);
   const [votes, setVote] = useState(
     new Array(6 + 1)
@@ -10,36 +10,48 @@ const App = props => {
       .map(parseFloat)
   );
   const [itemVotes, setItemVote] = useState(0);
+  const [highestVote, setHighVote] = useState(0);
+  const [statement, setStatement] = useState("");
 
-  const handleClick = item => {
+  const handleClick = () => {
     let randomItem = Math.floor(Math.random() * anecdotes.length);
-
     setSelected(randomItem);
-    //let chosenItemIndex = anecdotes.indexOf(item);
-
     setItemVote(votes[randomItem]);
   };
   const handleUpdateVote = item => {
     let chosenItemIndex = anecdotes.indexOf(item);
-
     votes[chosenItemIndex] += 1;
     setVote(votes);
-    console.log(votes);
-    console.log(votes[chosenItemIndex]);
     setItemVote(votes[chosenItemIndex]);
+
+    let highVote = highestVote;
+    let anecdoteWithHightVote = statement;
+    for (let i = 0; i < votes.length; i++) {
+      if (votes[i] > highVote) {
+        highVote = votes[i];
+        anecdoteWithHightVote = anecdotes[i];
+
+        setStatement(anecdoteWithHightVote);
+        setHighVote(highVote);
+      }
+    }
   };
 
   return (
     <div>
+      <div style={{ marginBottom: "20px" }}>Anecdote Of The day</div>
       {anecdotes[selected]}
       <div>Has {itemVotes} votes</div>
       <div>
         <button onClick={() => handleUpdateVote(anecdotes[selected])}>
           Vote
         </button>
-        <button onClick={() => handleClick(anecdotes[selected])}>
-          Next Anecdote!
-        </button>
+        <button onClick={() => handleClick()}>Next Anecdote!</button>
+        <div style={{ marginTop: "20px" }}>Anecdote With Most Votes</div>
+        <div style={{ marginTop: "20px" }}>{statement}</div>
+        <div style={{ marginTop: "20px" }}>
+          {highestVote > 0 ? <div> Has {highestVote} votes </div> : null}
+        </div>
       </div>
     </div>
   );
