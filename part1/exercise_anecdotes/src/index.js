@@ -3,19 +3,43 @@ import ReactDOM from "react-dom";
 
 const App = props => {
   const [selected, setSelected] = useState(0);
+  const [votes, setVote] = useState(
+    new Array(6 + 1)
+      .join("0")
+      .split("")
+      .map(parseFloat)
+  );
+  const [itemVotes, setItemVote] = useState(0);
 
-  const handleClick = () => {
+  const handleClick = item => {
     let randomItem = Math.floor(Math.random() * anecdotes.length);
+
     setSelected(randomItem);
+    //let chosenItemIndex = anecdotes.indexOf(item);
+
+    setItemVote(votes[randomItem]);
+  };
+  const handleUpdateVote = item => {
+    let chosenItemIndex = anecdotes.indexOf(item);
+
+    votes[chosenItemIndex] += 1;
+    setVote(votes);
+    console.log(votes);
+    console.log(votes[chosenItemIndex]);
+    setItemVote(votes[chosenItemIndex]);
   };
 
   return (
     <div>
       {anecdotes[selected]}
-
+      <div>Has {itemVotes} votes</div>
       <div>
-        {" "}
-        <button onClick={() => handleClick()}>Next Anecdote!</button>
+        <button onClick={() => handleUpdateVote(anecdotes[selected])}>
+          Vote
+        </button>
+        <button onClick={() => handleClick(anecdotes[selected])}>
+          Next Anecdote!
+        </button>
       </div>
     </div>
   );
@@ -31,7 +55,3 @@ const anecdotes = [
 ];
 
 ReactDOM.render(<App />, document.getElementById("root"));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
