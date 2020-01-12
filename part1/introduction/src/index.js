@@ -1,46 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Course from "./components/Course";
 import "./index.css";
-
-const Header = props => {
-  return <div>{props.course}</div>;
-};
-
-const Content = props => {
-  return (
-    <div>
-      <Part parts={props.parts} />
-    </div>
-  );
-};
-const Total = props => {
-  return (
-    <div>
-      {props.parts[0].exercises +
-        props.parts[1].exercises +
-        props.parts[2].exercises}
-    </div>
-  );
-};
-
-const Part = props => {
-  return (
-    <div>
-      <p>
-        {" "}
-        {props.parts[0].name} {props.parts[0].exercises}
-      </p>
-      <p>
-        {" "}
-        {props.parts[1].name} {props.parts[1].exercises}
-      </p>
-      <p>
-        {" "}
-        {props.parts[2].name} {props.parts[2].exercises}
-      </p>
-    </div>
-  );
-};
 
 const App = () => {
   const course = {
@@ -48,30 +9,28 @@ const App = () => {
     parts: [
       {
         name: "Fundamentals of React",
-        exercises: 10
+        exercises: 10,
+        id: 1
       },
       {
         name: "Using props to pass data",
-        exercises: 7
+        exercises: 7,
+        id: 2
       },
       {
         name: "State of a component",
-        exercises: 14
+        exercises: 14,
+        id: 3
+      },
+      {
+        name: "Redux",
+        exercises: 11,
+        id: 4
       }
     ]
   };
 
-  // Adjusting Scripts
-
-  return (
-    <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <p>
-        Number of exercises <Total parts={course.parts} />
-      </p>
-    </div>
-  );
+  return <Course course={course} />;
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
