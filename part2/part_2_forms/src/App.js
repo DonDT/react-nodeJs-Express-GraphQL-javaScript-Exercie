@@ -3,7 +3,9 @@ import React, { useState } from "react";
 const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState(null);
+  const [newNumber, setNewNumber] = useState("");
+  const [showAll, setShowAll] = useState(true);
+  const [searchName, setSearchName] = useState("");
 
   const handleSubmitForm = event => {
     event.preventDefault();
@@ -27,15 +29,31 @@ const App = () => {
   };
 
   const showList = () =>
-    persons.map(person => (
+    personsToShow.map(person => (
       <div key={person.name}>
         {person.name} {person.number}
       </div>
     ));
 
+  const personsToShow = showAll
+    ? persons
+    : persons.filter(person =>
+        person.name.toLowerCase().includes(searchName.toLowerCase())
+      );
+
+  const handleSearchTerm = event => {
+    setSearchName(event.target.value);
+    setShowAll(false);
+    console.log(searchName);
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+        filter shown with{" "}
+        <input value={searchName} onChange={handleSearchTerm} />
+      </div>
       <form onSubmit={handleSubmitForm}>
         <div>
           name: <input value={newName} onChange={handleSubmitNewName} />
