@@ -5,6 +5,8 @@ import "./App.css";
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [itemsFound, setItemsFound] = useState([]);
+  const [showCountryDetails, setShowCountryDetails] = useState(false);
+  const [clickedItem, setClickedItem] = useState([]);
 
   const handleSearchTerm = event => {
     setSearchTerm(event.target.value);
@@ -21,27 +23,41 @@ function App() {
     }
   });
 
+  const specificCountry = () =>
+    itemsFound.map(item => (
+      <div key={item.name}>
+        <div style={{ marginBottom: "15px" }}>{item.name}</div>
+
+        <div>Capital {item.capital}</div>
+        <div>Population {item.population}</div>
+
+        <p>languages</p>
+        <ul>
+          {itemsFound[0].languages.map(item => (
+            <li key={item.nativeName}>{item.name}</li>
+          ))}
+        </ul>
+        <img src={item.flag} alt="country flag" width="150" height="150" />
+      </div>
+    ));
+
+  const displayIndividualCountry = data => {
+    setShowCountryDetails(true);
+    setClickedItem(data);
+    // setItemsFound([]);
+  };
+
   const displayData = () =>
     itemsFound.length > 10
       ? "Too may matches, specify another filter"
       : itemsFound.length === 1
-      ? itemsFound.map(item => (
+      ? specificCountry()
+      : itemsFound.map(item => (
           <div key={item.name}>
-            <div style={{ marginBottom: "15px" }}>{item.name}</div>
-
-            <div>Capital {item.capital}</div>
-            <div>Population {item.population}</div>
-
-            <p>languages</p>
-            <ul>
-              {itemsFound[0].languages.map(item => (
-                <li key={item.nativeName}>{item.name}</li>
-              ))}
-            </ul>
-            <img src={item.flag} alt="country flag" width="150" height="150" />
+            {item.name}{" "}
+            <button onClick={() => displayIndividualCountry(item)}>show</button>
           </div>
-        ))
-      : itemsFound.map(item => <div key={item.name}>{item.name}</div>);
+        ));
 
   const displayCountriesNames = () =>
     itemsFound.length > 0 && searchTerm.trim().length === 0
@@ -52,7 +68,34 @@ function App() {
     <div>
       Find countries{" "}
       <input type="text" value={searchTerm} onChange={handleSearchTerm} />
-      <div style={{ marginTop: "20px" }}>{displayCountriesNames()}</div>
+      {!showCountryDetails && (
+        <div style={{ marginTop: "20px" }}>{displayCountriesNames()}</div>
+      )}
+      {showCountryDetails && (
+        <div>
+          {searchTerm.trim().length > 0 ? (
+            <div>
+              <div style={{ marginBottom: "15px" }}>{clickedItem.name}</div>
+
+              <div>Capital {clickedItem.capital}</div>
+              <div>Population {clickedItem.population}</div>
+
+              <p>languages</p>
+              <ul>
+                {itemsFound[0].languages.map(item => (
+                  <li key={item.nativeName}>{item.name}</li>
+                ))}
+              </ul>
+              <img
+                src={clickedItem.flag}
+                alt="country flag"
+                width="150"
+                height="150"
+              />
+            </div>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }
