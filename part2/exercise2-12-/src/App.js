@@ -7,6 +7,9 @@ function App() {
   const [itemsFound, setItemsFound] = useState([]);
   const [showCountryDetails, setShowCountryDetails] = useState(false);
   const [clickedItem, setClickedItem] = useState([]);
+  const [weatherData, setWeatherData] = useState([
+    { temperature: "", image: "", windSpeed: "", windDirection: "" }
+  ]);
 
   const handleSearchTerm = event => {
     setSearchTerm(event.target.value);
@@ -41,10 +44,23 @@ function App() {
       </div>
     ));
 
-  const displayIndividualCountry = data => {
+  const displayIndividualCountry = info => {
     setShowCountryDetails(true);
-    setClickedItem(data);
-    // setItemsFound([]);
+    setClickedItem(info);
+
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHER_API_KEY}&query=${info.capital}`
+      )
+      .then(response =>
+        setWeatherData({
+          temperature: response.data.current.temperature,
+          image: response.data.current.weather_icons[0],
+          windSpeed: response.data.current.wind_speed,
+          windDirection: response.data.current.wind_dir
+        })
+      )
+      .catch(error => console.log(error));
   };
 
   const displayData = () =>
@@ -75,14 +91,16 @@ function App() {
         <div>
           {searchTerm.trim().length > 0 ? (
             <div>
-              <div style={{ marginBottom: "15px" }}>{clickedItem.name}</div>
+              <div style={{ marginBottom: "15px", fontWeight: "bold" }}>
+                {clickedItem.name}
+              </div>
 
               <div>Capital {clickedItem.capital}</div>
               <div>Population {clickedItem.population}</div>
 
-              <p>languages</p>
+              <p style={{ fontWeight: "bold" }}>languages</p>
               <ul>
-                {itemsFound[0].languages.map(item => (
+                {clickedItem.languages.map(item => (
                   <li key={item.nativeName}>{item.name}</li>
                 ))}
               </ul>
@@ -94,6 +112,29 @@ function App() {
               />
             </div>
           ) : null}
+          <div
+            style={{
+              marginTop: "15px",
+              marginBottom: "15px",
+              fontWeight: "bold"
+            }}
+          >
+            Weather In Helsinki
+          </div>
+          <div>
+            {" "}
+            <span style={{ fontWeight: "bold" }}>Temperature:</span>{" "}
+            {weatherData.temperature} Celcius
+          </div>
+          <img
+            src={weatherData.image}
+            alt="weather Icon"
+            style={{ marginTop: "15px" }}
+          />
+          <p>
+            <span style={{ fontWeight: "bold" }}>Wind:</span>{" "}
+            {weatherData.windSpeed} kph direction {weatherData.windDirection}
+          </p>
         </div>
       )}
     </div>
