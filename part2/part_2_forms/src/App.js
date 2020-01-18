@@ -21,27 +21,44 @@ const App = () => {
   const handleSubmitForm = event => {
     event.preventDefault();
 
-    for (let i = 0; i < persons.length; i++) {
-      if (persons[i].name === newName) {
-        alert(`${newName} is already added to phonebook`);
-      }
-    }
-
     const newPerson = {
       name: newName,
       number: newNumber
     };
 
-    Methods.postNew(newPerson).then(response => {
-      setPersons(
-        persons.concat({
-          name: response.data.name,
-          number: response.data.number
-        })
-      );
-      setNewName("");
-      setNewNumber("");
-    });
+    const person = persons.find(item => item.name === newName);
+    const arrayWithoutPerson = persons.filter(n => n.name !== newName);
+    const changeOrAddPerson = { ...person, number: newNumber };
+    const newId = persons.find(
+      individual => individual.name === changeOrAddPerson.name
+    );
+
+    if (person) {
+      if (
+        window.confirm(
+          `${newName} is already in the phone book, replace the old number with the new one?`
+        )
+      ) {
+        axios
+          .put(`http://localhost:3001/persons/${newId.id}`, changeOrAddPerson)
+          .then(response =>
+            setPersons(arrayWithoutPerson.concat(response.data))
+          );
+        setNewName("");
+        setNewNumber("");
+      }
+    } else {
+      Methods.postNew(newPerson).then(response => {
+        setPersons(
+          persons.concat({
+            name: response.data.name,
+            number: response.data.number
+          })
+        );
+        setNewName("");
+        setNewNumber("");
+      });
+    }
   };
 
   const handleSubmitNewName = event => {
