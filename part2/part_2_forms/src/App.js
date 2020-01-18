@@ -3,6 +3,7 @@ import Filter from "./components/filter";
 import FormField from "./components/formField";
 import Persons from "./components/persons";
 import Methods from "./services/persons";
+import Notification from "./components/notification";
 import axios from "axios";
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [searchName, setSearchName] = useState("");
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     axios
@@ -43,9 +45,14 @@ const App = () => {
           .put(`http://localhost:3001/persons/${newId.id}`, changeOrAddPerson)
           .then(response =>
             setPersons(arrayWithoutPerson.concat(response.data))
-          );
+          )
+          .catch(error => console.log(error));
         setNewName("");
         setNewNumber("");
+        setNotification(`${changeOrAddPerson.name} number has been changed`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
       }
     } else {
       Methods.postNew(newPerson).then(response => {
@@ -90,7 +97,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      {notification && <Notification message={notification} />}
       <Filter searchName={searchName} handleSearchTerm={handleSearchTerm} />
 
       <FormField
