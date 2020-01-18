@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/filter";
 import FormField from "./components/formField";
 import Persons from "./components/persons";
+import Methods from "./services/persons";
 import axios from "axios";
 
 const App = () => {
@@ -31,7 +32,7 @@ const App = () => {
       number: newNumber
     };
 
-    axios.post("http://localhost:3001/persons", newPerson).then(response => {
+    Methods.postNew(newPerson).then(response => {
       setPersons(
         persons.concat({
           name: response.data.name,
