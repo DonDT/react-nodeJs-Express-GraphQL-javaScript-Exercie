@@ -9,8 +9,12 @@ const getAll = () => {
 const postNew = newData => {
   return axios.post(baseURL, newData);
 };
+const deleteItem = id => {
+  return axios.delete(`${baseURL}/${id}`);
+};
 
 export default {
   getAll,
-  postNew
+  postNew,
+  deleteItem
 };

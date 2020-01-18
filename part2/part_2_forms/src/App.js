@@ -62,6 +62,14 @@ const App = () => {
     setShowAll(false);
   };
 
+  const handleDeleteItem = id => {
+    if (window.confirm("Delete this person ?")) {
+      Methods.deleteItem(id).then(response => {
+        setPersons(persons.filter(n => n.id !== id));
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -76,7 +84,10 @@ const App = () => {
         handleSubmitNewNumber={handleSubmitNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons
+        personsToShow={personsToShow}
+        handleDeleteItem={handleDeleteItem}
+      />
     </div>
   );
 };
