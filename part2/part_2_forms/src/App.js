@@ -18,10 +18,12 @@ const App = () => {
     axios
       .get("http://localhost:3001/persons")
       .then(response => setPersons(response.data));
-  }, []);
+  });
 
   const handleSubmitForm = event => {
     event.preventDefault();
+
+    //setPersons(persons.concat({ name: newName, number: newNumber }));
 
     const newPerson = {
       name: newName,
@@ -43,28 +45,45 @@ const App = () => {
       ) {
         axios
           .put(`http://localhost:3001/persons/${newId.id}`, changeOrAddPerson)
-          .then(response =>
-            setPersons(arrayWithoutPerson.concat(response.data))
-          )
-          .catch(error => console.log(error));
-        setNewName("");
-        setNewNumber("");
+          .then(response => {
+            setPersons(arrayWithoutPerson.concat(response.data));
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch(error => {
+            setNotification(
+              `Information of ${changeOrAddPerson.name} has already been removed from server`
+            );
+            setNewName("");
+            setNewNumber("");
+            setTimeout(() => {
+              setNotification(null);
+            }, 3000);
+          });
         setNotification(`${changeOrAddPerson.name} number has been changed`);
         setTimeout(() => {
           setNotification(null);
         }, 3000);
       }
     } else {
-      Methods.postNew(newPerson).then(response => {
-        setPersons(
-          persons.concat({
-            name: response.data.name,
-            number: response.data.number
-          })
-        );
-        setNewName("");
-        setNewNumber("");
-      });
+      Methods.postNew(newPerson)
+        .then(response => {
+          setPersons(
+            persons.concat({
+              name: response.data.name,
+              number: response.data.number
+            })
+          );
+          setNewName("");
+          setNewNumber("");
+          setNotification(`${response.data.name} number has been added`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 3000);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
 
@@ -87,10 +106,20 @@ const App = () => {
   };
 
   const handleDeleteItem = id => {
+    const itemToDelete = persons.find(person => person.id === id);
+
     if (window.confirm("Delete this person ?")) {
-      Methods.deleteItem(id).then(response => {
-        setPersons(persons.filter(n => n.id !== id));
-      });
+      Methods.deleteItem(id)
+        .then(response => {
+          setPersons(persons.filter(n => n.id !== id));
+          setNotification(`${itemToDelete.name} was deleted`);
+          setTimeout(() => {
+            setNotification(null);
+          }, 3000);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
 
