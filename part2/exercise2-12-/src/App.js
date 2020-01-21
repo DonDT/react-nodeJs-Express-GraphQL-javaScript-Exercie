@@ -26,6 +26,8 @@ function App() {
     }
   });
 
+  // Synchronize
+
   const specificCountry = () =>
     itemsFound.map(item => (
       <div key={item.name}>
